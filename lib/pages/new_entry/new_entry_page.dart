@@ -163,6 +163,8 @@ class _IntervalSelectionState extends State<IntervalSelection> {
         children: [
           Text(
             "Remind me every",
+
+
             style: Theme.of(context).textTheme.subtitle2,
           ),
           DropdownButton(
