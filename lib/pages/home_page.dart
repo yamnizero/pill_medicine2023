@@ -12,19 +12,22 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding:  EdgeInsets.all(2.h),
+        padding: EdgeInsets.all(2.h),
         child: Column(
-          children:  [
-             const ToContainer(),
-            SizedBox(height: 2.h,),
+          children: [
+            const ToContainer(),
+            SizedBox(
+              height: 2.h,
+            ),
             const Flexible(child: BottomContainer())
           ],
         ),
       ),
       floatingActionButton: InkResponse(
-        onTap: (){
+        onTap: () {
           //go to new entry page..
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>const NewEntryPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const NewEntryPage()));
         },
         child: SizedBox(
           width: 18.w,
@@ -56,19 +59,29 @@ class ToContainer extends StatelessWidget {
       children: [
         Container(
             alignment: Alignment.topLeft,
-            padding:  EdgeInsets.only(bottom: 1.h),
-            child: Text("Worry less. \nLive healthier.",
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.headline4,)),
+            padding: EdgeInsets.only(bottom: 1.h),
+            child: Text(
+              "Worry less. \nLive healthier.",
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.headline4,
+            )),
         Container(
             alignment: Alignment.topLeft,
-            padding:  EdgeInsets.only(bottom: 1.h),
-            child: Text("Welcome to Daily Dose",style: Theme.of(context).textTheme.subtitle2,)),
-        SizedBox(height: 2.h,),
+            padding: EdgeInsets.only(bottom: 1.h),
+            child: Text(
+              "Welcome to Daily Dose",
+              style: Theme.of(context).textTheme.subtitle2,
+            )),
+        SizedBox(
+          height: 2.h,
+        ),
         Container(
             alignment: Alignment.center,
-            padding:  EdgeInsets.only(bottom: 1.h),
-            child: Text("0",style: Theme.of(context).textTheme.headline4,)),
+            padding: EdgeInsets.only(bottom: 1.h),
+            child: Text(
+              "0",
+              style: Theme.of(context).textTheme.headline4,
+            )),
       ],
     );
   }
@@ -79,12 +92,12 @@ class BottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Center(
-      child: Text("No Medicine",textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.headline3,
+    return Center(
+      child: Text(
+        "No Medicine",
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.headline3,
       ),
     );
   }
 }
-
-

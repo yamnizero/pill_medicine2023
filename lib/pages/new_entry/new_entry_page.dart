@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pill_medicine/common/convert_time.dart';
 import 'package:pill_medicine/constants.dart';
 import 'package:pill_medicine/models/medicine_type.dart';
 import 'package:sizer/sizer.dart';
@@ -116,8 +117,8 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     ),
                     //change image from tablet
                     MedicineTypeColumn(
-                      name: "syringe",
-                      iconValue: "assets/icons/syringe.svg",
+                      name: "tablet",
+                      iconValue: "assets/icons/tablet.svg",
                       isSelected:
                           snapshot.data == MedicineType.syringe ? true : false,
                       medicineType: MedicineType.syringe,
@@ -130,8 +131,90 @@ class _NewEntryPageState extends State<NewEntryPage> {
               title: "Interval Selection",
               isRequired: true,
             ),
-            IntervalSelection()
+            const IntervalSelection(),
+            const PanelTitle(
+              title: "Starting Time",
+              isRequired: true,
+            ),
+            const SelectTime(),
+            SizedBox(
+              height: 2.h,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 8.w, right: 8.w),
+              child: SizedBox(
+                width: 80.w,
+                height: 8.h,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: kPrimaryColor,
+                      shape: const StadiumBorder()),
+                  onPressed: () {},
+                  child: Center(
+                    child: Text(
+                      "Confirm",
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: kScaffoldColor,
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SelectTime extends StatefulWidget {
+  const SelectTime({Key? key}) : super(key: key);
+
+  @override
+  _SelectTimeState createState() => _SelectTimeState();
+}
+
+class _SelectTimeState extends State<SelectTime> {
+  TimeOfDay _time = const TimeOfDay(hour: 0, minute: 00);
+  bool _clicked = false;
+
+  Future<TimeOfDay> _selectTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _time,
+    );
+    if (picked != null && picked != _time) {
+      setState(() {
+        _time = picked;
+        _clicked = true;
+      });
+    }
+    return picked!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 8.h,
+      child: Padding(
+        padding: EdgeInsets.only(top: 2.h),
+        child: TextButton(
+          style: TextButton.styleFrom(
+              backgroundColor: kPrimaryColor, shape: const StadiumBorder()),
+          onPressed: () {
+            _selectTime();
+          },
+          child: Center(
+            child: Text(
+              _clicked == false
+                  ? "Select Time"
+                  : "${convertTime(_time.hour.toString())}:${convertTime(_time.minute.toString())}",
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    color: kScaffoldColor,
+                  ),
+            ),
+          ),
         ),
       ),
     );
@@ -163,8 +246,6 @@ class _IntervalSelectionState extends State<IntervalSelection> {
         children: [
           Text(
             "Remind me every",
-
-
             style: Theme.of(context).textTheme.subtitle2,
           ),
           DropdownButton(
@@ -186,8 +267,8 @@ class _IntervalSelectionState extends State<IntervalSelection> {
                   child: Text(
                     value.toString(),
                     style: Theme.of(context).textTheme.caption!.copyWith(
-                      color: kSeconderColor,
-                    ),
+                          color: kSeconderColor,
+                        ),
                   ),
                 );
               },
@@ -200,8 +281,9 @@ class _IntervalSelectionState extends State<IntervalSelection> {
               );
             },
           ),
-          Text(_selected == 1 ? "hour" : "hours",
-          style: Theme.of(context).textTheme.subtitle2 ,
+          Text(
+            _selected == 1 ? "hour" : "hours",
+            style: Theme.of(context).textTheme.subtitle2,
           )
         ],
       ),
