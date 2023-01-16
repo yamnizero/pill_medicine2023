@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pill_medicine/constants.dart';
@@ -36,10 +37,13 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                 ),
                 child:  Text(
                   "Delete",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                    color: kScaffoldColor
+                  ),
                 ),
                 onPressed: () {
                   //open  alert dialog box ,
+                  openAlertBox(context);
                 },
               ),
             ),
@@ -47,6 +51,51 @@ class _MedicineDetailsState extends State<MedicineDetails> {
           ],
         ),
       ),
+    );
+  }
+
+  openAlertBox(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: kScaffoldColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              bottomRight: Radius.circular(20.0),
+            ),
+          ),
+          contentPadding: EdgeInsets.only(top: 1.h),
+          title: Text(
+            'Delete This Reminder?',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: Theme.of(context).textTheme.caption,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // global block  to delete medicine ,
+              },
+              child: Text(
+                'OK',
+                style: Theme.of(context).textTheme.caption!.copyWith(
+                  color: kSeconderColor
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

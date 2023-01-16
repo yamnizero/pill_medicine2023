@@ -258,7 +258,9 @@ class _IntervalSelectionState extends State<IntervalSelection> {
         children: [
           Text(
             "Remind me every",
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.subtitle2!.copyWith(
+              color: kTextColor
+            ),
           ),
           DropdownButton(
             iconEnabledColor: kOtherColor,
@@ -267,7 +269,9 @@ class _IntervalSelectionState extends State<IntervalSelection> {
             hint: _selected == 0
                 ? Text(
                     "Select an Interval",
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.caption!.copyWith(
+                      color: kPrimaryColor
+                    ),
                   )
                 : null,
             elevation: 4,
@@ -295,7 +299,9 @@ class _IntervalSelectionState extends State<IntervalSelection> {
           ),
           Text(
             _selected == 1 ? "hour" : "hours",
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.subtitle2!.copyWith(
+              color: kTextColor
+            ),
           )
         ],
       ),
