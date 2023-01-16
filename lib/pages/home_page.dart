@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pill_medicine/constants.dart';
+import 'package:pill_medicine/pages/medicine_details/medicine_details.dart';
 import 'package:pill_medicine/pages/new_entry/new_entry_page.dart';
 import 'package:sizer/sizer.dart';
 
@@ -92,12 +94,67 @@ class BottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        "No Medicine",
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline3,
+    // return Center(
+    //   child: Text(
+    //     "No Medicine",
+    //     textAlign: TextAlign.center,
+    //     style: Theme.of(context).textTheme.headline3,
+    //   ),
+    // );
+    return GridView.builder(
+        padding: EdgeInsets.only(top: 1.h),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemCount: 4,
+        itemBuilder: (context, index) {
+          return MedicineCard();
+        });
+  }
+}
+
+class MedicineCard extends StatelessWidget {
+  const MedicineCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      highlightColor: kWhite,
+      splashColor: Colors.grey ,
+      child: Container(
+        padding: EdgeInsets.only(left: 2.w,right: 2.w,top: 1.h,bottom: 1.h),
+        margin: EdgeInsets.all(1.h),
+        decoration: BoxDecoration(
+            color: kWhite, borderRadius: BorderRadius.circular(2.h)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(),
+            SvgPicture.asset(
+              'assets/icons/bottle.svg',
+              height: 7.h,
+              color: kOtherColor,
+            ),
+            const Spacer(),
+            Text("Calpol",
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.headline6,),
+            SizedBox(height: 0.3.h,),
+            //time interval data with condition....
+            Text("Every 8 hours",
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.caption,),
+          ],
+        ),
       ),
+      onTap: (){
+        //go to details activity,,,
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>MedicineDetails()));
+      },
     );
   }
 }
+

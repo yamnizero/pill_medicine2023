@@ -20,9 +20,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   NewEntryBlock? newEntryBlock;
+
   @override
   void initState() {
-   newEntryBlock = NewEntryBlock();
+    newEntryBlock = NewEntryBlock();
     super.initState();
   }
 
@@ -39,19 +40,20 @@ class _MyAppState extends State<MyApp> {
               scaffoldBackgroundColor: kScaffoldColor,
               //appbar theme
               appBarTheme: AppBarTheme(
-                  backgroundColor: kScaffoldColor,
-                  elevation: 0,
-                  toolbarHeight: 7.h,
-                  iconTheme: IconThemeData(
-                    color: kSeconderColor,
-                    size: 20.sp,
-                  ),
-                  titleTextStyle: GoogleFonts.mulish(
-                    color: kTextColor,
-                    fontWeight: FontWeight.w800,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 16.sp,
-                  )),
+                backgroundColor: kScaffoldColor,
+                elevation: 0,
+                toolbarHeight: 7.h,
+                iconTheme: IconThemeData(
+                  color: kSeconderColor,
+                  size: 20.sp,
+                ),
+                titleTextStyle: GoogleFonts.mulish(
+                  color: kTextColor,
+                  fontWeight: FontWeight.w800,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 16.sp,
+                ),
+              ),
               textTheme: TextTheme(
                   headline3: TextStyle(
                     fontSize: 28.sp,
@@ -63,14 +65,25 @@ class _MyAppState extends State<MyApp> {
                     fontWeight: FontWeight.w800,
                     color: kTextColor,
                   ),
+                  headline5: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w900,
+                    color: kTextColor,
+                  ),
+                  headline6: GoogleFonts.poppins(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.0,
+                    color: kTextColor,
+                  ),
                   subtitle2: GoogleFonts.poppins(
                     fontSize: 12.sp,
-                    color: kTextColor,
+                    color: kTextLightColor,
                   ),
                   caption: GoogleFonts.poppins(
                       fontSize: 9.sp,
                       fontWeight: FontWeight.w500,
-                      color: kPrimaryColor),
+                      color: kTextLightColor),
                   labelMedium: TextStyle(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w500,
@@ -79,9 +92,9 @@ class _MyAppState extends State<MyApp> {
               inputDecorationTheme: const InputDecorationTheme(
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: kTextLightColor,
-                      width: 0.7,
-                    )),
+                  color: kTextLightColor,
+                  width: 0.7,
+                )),
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: kTextLightColor,
