@@ -15,7 +15,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(const Duration(milliseconds: 2500), (){
+    Timer(const Duration(milliseconds: 2500), ( ){
       Navigator.popUntil(context, ModalRoute.withName('/'));
     });
   }
