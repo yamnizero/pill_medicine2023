@@ -232,7 +232,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
 
                       //go to success screen
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SuccessScreen()));
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>SuccessScreen()));
 
                     },
                   ),
@@ -349,6 +349,7 @@ class _IntervalSelectionState extends State<IntervalSelection> {
 
   @override
   Widget build(BuildContext context) {
+    final NewEntryBlock newEntryBlock = Provider.of<NewEntryBlock>(context);
     return Padding(
       padding: EdgeInsets.only(top: 1.h),
       child: Row(
@@ -391,6 +392,7 @@ class _IntervalSelectionState extends State<IntervalSelection> {
               setState(
                 () {
                   _selected = newVal!;
+                  newEntryBlock.updateInterval(newVal);
                 },
               );
             },
