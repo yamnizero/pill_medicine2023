@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pill_medicine/constants.dart';
+import 'package:pill_medicine/globlal_bloc.dart';
 import 'package:pill_medicine/pages/home_page.dart';
 import 'package:pill_medicine/pages/new_entry/new_entry_block.dart';
 import 'package:provider/provider.dart';
@@ -19,18 +20,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  NewEntryBlock? newEntryBlock;
+  GlobalBloc? globalBloc;
 
   @override
   void initState() {
-    newEntryBlock = NewEntryBlock();
+    globalBloc = GlobalBloc();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Provider<NewEntryBlock>.value(
-      value: newEntryBlock!,
+    return Provider<GlobalBloc>.value(
+      value: globalBloc!,
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,

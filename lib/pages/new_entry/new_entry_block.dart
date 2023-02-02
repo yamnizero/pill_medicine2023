@@ -14,7 +14,7 @@ class NewEntryBlock {
 
   BehaviorSubject<String>? _selectedTimeOfDay$;
 
-  BehaviorSubject<String>? get selectTimeOfDau => _selectedTimeOfDay$;
+  BehaviorSubject<String>? get selectTimeOfDay => _selectedTimeOfDay$;
 
   //error state
   BehaviorSubject<EntryError>? _errorState$;

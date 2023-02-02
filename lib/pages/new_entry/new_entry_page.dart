@@ -1,11 +1,18 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pill_medicine/common/convert_time.dart';
 import 'package:pill_medicine/constants.dart';
+import 'package:pill_medicine/globlal_bloc.dart';
+import 'package:pill_medicine/models/errors.dart';
+import 'package:pill_medicine/models/medicine.dart';
 import 'package:pill_medicine/models/medicine_type.dart';
 import 'package:pill_medicine/pages/new_entry/new_entry_block.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import '../success_screen/success_screen.dart';
 
 class NewEntryPage extends StatefulWidget {
   const NewEntryPage({Key? key}) : super(key: key);
@@ -17,7 +24,7 @@ class NewEntryPage extends StatefulWidget {
 class _NewEntryPageState extends State<NewEntryPage> {
   late TextEditingController nameController;
   late TextEditingController dosageController;
-late  NewEntryBlock _newEntryBloc;
+  late  NewEntryBlock _newEntryBloc;
   late GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
@@ -36,10 +43,12 @@ late  NewEntryBlock _newEntryBloc;
     dosageController = TextEditingController();
     _scaffoldKey = GlobalKey<ScaffoldState>();
     _newEntryBloc = NewEntryBlock();
+    initializeErrorListen();
   }
 
   @override
   Widget build(BuildContext context) {
+    final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
@@ -167,6 +176,63 @@ late  NewEntryBlock _newEntryBloc;
                     onPressed: () {
                       //add medicine
                       //some Validation
+                      String? medicineName;
+                      int? dosage;
+
+                      //medicineName
+                      if(nameController.text == "" ){
+                        _newEntryBloc.submitError(EntryError.nameNull);
+                        return;
+                      }
+                      if(nameController.text != ""){
+                        medicineName = nameController.text;
+                      }
+                      //dosage
+                      if(dosageController.text == "" ){
+                        dosage =0;
+                      }
+                      if(dosageController.text != ""){
+                        dosage = int.parse(dosageController.text);
+                      }
+                      for(var medicine in globalBloc.medicineList$!.value){
+                        if(medicineName == medicine.medicineName){
+                          _newEntryBloc.submitError(EntryError.nameDuplicate);
+                          return;
+                        }
+                      }
+                      if(_newEntryBloc.selectIntervals!.value == 0){
+                        _newEntryBloc.submitError(EntryError.interval);
+                        return;
+                      }
+                      if(_newEntryBloc.selectTimeOfDay!.value == 'None'){
+                        _newEntryBloc.submitError(EntryError.startTime);
+                        return;
+                      }
+                      String medicineType =_newEntryBloc
+                      .selectedMedicineType!.value
+                      .toString().substring(13);
+
+                      int interval =_newEntryBloc.selectIntervals!.value;
+                      String startTime = _newEntryBloc.selectTimeOfDay!.value;
+                      List<int> intIDs = makeIDs(
+                        24 / _newEntryBloc.selectIntervals!.value
+                      );
+                      List<String> notificationIDs =intIDs.map((i) => i.toString()).toList();
+
+                      Medicine newEntryMedicine = Medicine(
+                          notificationIDs: notificationIDs,
+                        medicineName: medicineName,
+                        dosage: dosage,
+                        medicineType: medicineType,
+                        interval: interval,
+                        startTime: startTime,
+                      );
+                      //update medicine list via global bloc
+                      globalBloc.updateMedicineList(newEntryMedicine);
+
+
+                      //go to success screen
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SuccessScreen()));
 
                     },
                   ),
@@ -177,6 +243,38 @@ late  NewEntryBlock _newEntryBloc;
         ),
       ),
     );
+  }
+
+  void initializeErrorListen(){
+    _newEntryBloc.errorState!.listen((EntryError error) {
+      switch (error){
+        case EntryError.nameNull:displayError("Please enter the medicine's name");break;
+        case EntryError.nameDuplicate:displayError("Medicine name already exists");break;
+        case EntryError.dosage:displayError("Please enter the dosage required");break;
+        case EntryError.interval:displayError("Please select the reminder's interval");break;
+        case EntryError.startTime:displayError("Please select the reminder's starting time");break;
+        default:
+      }
+    });
+  }
+  void displayError(String error){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: kOtherColor,
+        content:  Text(error),
+      duration: const Duration(milliseconds: 2000),
+      ),
+
+    );
+  }
+
+  List<int> makeIDs(double n){
+    var rng = Random();
+    List<int> ids =[];
+    for(int i =0 ; i<n;i++){
+      ids.add(rng.nextInt(1000000000));
+    }
+    return ids;
   }
 }
 
