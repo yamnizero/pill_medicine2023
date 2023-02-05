@@ -1,9 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pill_medicine/constants.dart';
+import 'package:pill_medicine/globlal_bloc.dart';
+import 'package:pill_medicine/models/medicine.dart';
 import 'package:pill_medicine/pages/medicine_details/medicine_details.dart';
 import 'package:pill_medicine/pages/new_entry/new_entry_page.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class HomePage extends StatelessWidget {
@@ -56,6 +58,7 @@ class ToContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -77,13 +80,18 @@ class ToContainer extends StatelessWidget {
         SizedBox(
           height: 2.h,
         ),
-        Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(bottom: 1.h),
-            child: Text(
-              "0",
-              style: Theme.of(context).textTheme.headline4,
-            )),
+        //show number of saved medicines from shared preferences
+        StreamBuilder<List<Medicine>>(
+          stream: globalBloc.medicineList$,
+            builder: (context, snapshot) {
+          return Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(bottom: 1.h),
+              child: Text(
+                !snapshot.hasData ? '0' : snapshot.data!.length.toString(),
+                style: Theme.of(context).textTheme.headline4,
+              ));
+        }),
       ],
     );
   }
@@ -94,6 +102,7 @@ class BottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
     // return Center(
     //   child: Text(
     //     "No Medicine",
@@ -101,20 +110,63 @@ class BottomContainer extends StatelessWidget {
     //     style: Theme.of(context).textTheme.headline3,
     //   ),
     // );
-    return GridView.builder(
-        padding: EdgeInsets.only(top: 1.h),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return MedicineCard();
+   return StreamBuilder<List<Medicine>>(
+        stream: globalBloc.medicineList$,
+        builder: (context, snapshot) {
+        if(!snapshot.hasData){
+          //if no data is   saved
+          return Container();
+        }else if(snapshot.data!.isEmpty){
+          return Center(
+            child: Text("No Medicine",style: Theme.of(context).textTheme.headline3,),
+          );
+        }else{
+          return GridView.builder(
+              padding: EdgeInsets.only(top: 1.h),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return  MedicineCard(
+                  medicine: snapshot.data![index],
+                );
+              }
+          );
+        }
         });
   }
 }
 
 class MedicineCard extends StatelessWidget {
-  const MedicineCard({Key? key}) : super(key: key);
+  //for getting the current details of the saved items
+  final Medicine medicine;
+  const MedicineCard({Key? key, required this.medicine}) : super(key: key);
+
+  Hero makeIcon(){
+    if(medicine.medicineType == 'Bottle'){
+      return Hero(tag: medicine.medicineName! + medicine.medicineType!,
+        child: SvgPicture.asset('assets/icons/bottle.svg',color: kOtherColor,),
+      );
+    }else if(medicine.medicineType == 'Pill'){
+      return Hero(tag: medicine.medicineName! + medicine.medicineType!,
+        child: SvgPicture.asset('assets/icons/pill.svg',color: kOtherColor,),
+      );
+    }else if(medicine.medicineType == 'Syringe'){
+      return Hero(tag: medicine.medicineName! + medicine.medicineType!,
+        child: SvgPicture.asset('assets/icons/syringe.svg',color: kOtherColor,),
+      );
+    }else if(medicine.medicineType == 'Tablet'){
+      return Hero(tag: medicine.medicineName! + medicine.medicineType!,
+        child: SvgPicture.asset('assets/icons/tablet.svg',color: kOtherColor,),
+      );
+    }
+    // in case of no medicine
+    return Hero(
+      tag: medicine.medicineName! + medicine.medicineType!,
+      child: const Icon(Icons.error),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,13 +183,10 @@ class MedicineCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            SvgPicture.asset(
-              'assets/icons/bottle.svg',
-              height: 7.h,
-              color: kOtherColor,
-            ),
+            makeIcon(),
             const Spacer(),
-            Text("Calpol",
+            Text(
+            medicine.medicineName!,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.start,
               style: Theme.of(context).textTheme.headline6,),
