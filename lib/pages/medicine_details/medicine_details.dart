@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pill_medicine/constants.dart';
+import 'package:pill_medicine/models/medicine.dart';
 import 'package:sizer/sizer.dart';
 
 class MedicineDetails extends StatefulWidget {
-  const MedicineDetails({Key? key}) : super(key: key);
+  final Medicine medicine;
+  const MedicineDetails(this.medicine,{Key? key}) : super(key: key);
 
   @override
   _MedicineDetailsState createState() => _MedicineDetailsState();

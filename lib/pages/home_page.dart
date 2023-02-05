@@ -143,28 +143,28 @@ class MedicineCard extends StatelessWidget {
   final Medicine medicine;
   const MedicineCard({Key? key, required this.medicine}) : super(key: key);
 
-  Hero makeIcon(){
+  Hero makeIcon(double size){
     if(medicine.medicineType == 'Bottle'){
       return Hero(tag: medicine.medicineName! + medicine.medicineType!,
-        child: SvgPicture.asset('assets/icons/bottle.svg',color: kOtherColor,),
+        child: SvgPicture.asset('assets/icons/bottle.svg',color: kOtherColor,height: 7.h,),
       );
     }else if(medicine.medicineType == 'Pill'){
       return Hero(tag: medicine.medicineName! + medicine.medicineType!,
-        child: SvgPicture.asset('assets/icons/pill.svg',color: kOtherColor,),
+        child: SvgPicture.asset('assets/icons/pill.svg',color: kOtherColor,height: 7.h,),
       );
     }else if(medicine.medicineType == 'Syringe'){
       return Hero(tag: medicine.medicineName! + medicine.medicineType!,
-        child: SvgPicture.asset('assets/icons/syringe.svg',color: kOtherColor,),
+        child: SvgPicture.asset('assets/icons/syringe.svg',color: kOtherColor,height: 7.h,),
       );
     }else if(medicine.medicineType == 'Tablet'){
       return Hero(tag: medicine.medicineName! + medicine.medicineType!,
-        child: SvgPicture.asset('assets/icons/tablet.svg',color: kOtherColor,),
+        child: SvgPicture.asset('assets/icons/tablet.svg',color: kOtherColor,height: 7.h,),
       );
     }
     // in case of no medicine
     return Hero(
       tag: medicine.medicineName! + medicine.medicineType!,
-      child: const Icon(Icons.error),
+      child:  Icon(Icons.error,color: kOtherColor,size: size,),
     );
   }
 
@@ -183,16 +183,19 @@ class MedicineCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            makeIcon(),
+            makeIcon(7.h),
             const Spacer(),
-            Text(
-            medicine.medicineName!,
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.headline6,),
+            Hero(
+              tag: medicine.medicineName!,
+              child: Text(
+              medicine.medicineName!,
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.headline6,),
+            ),
             SizedBox(height: 0.3.h,),
             //time interval data with condition....
-            Text("Every 8 hours",
+            Text(medicine.interval == 1 ? "Every ${medicine.interval} hour" : "Every ${medicine.interval} hour",
               overflow: TextOverflow.fade,
               textAlign: TextAlign.start,
               style: Theme.of(context).textTheme.caption,),
@@ -201,7 +204,22 @@ class MedicineCard extends StatelessWidget {
       ),
       onTap: (){
         //go to details activity,,,
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>MedicineDetails()));
+        Navigator.of(context).push(PageRouteBuilder<void>(
+            pageBuilder: (BuildContext context,Animation<double> animation,Animation<double> secondaryAnimation){
+              return AnimatedBuilder(
+                animation: animation,
+                builder: (context, Widget? child) {
+                  return Opacity(
+                    opacity: animation.value,
+                    child: MedicineDetails(medicine),
+                  );
+                },
+              );
+            },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+        );
+
       },
     );
   }
