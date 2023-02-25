@@ -49,7 +49,31 @@ class GlobalBloc {
       _medicineList$!.add(prefList);
     }
   }
+
+  Future removeMedicine(Medicine remove)async{
+    SharedPreferences sharedUser = await SharedPreferences.getInstance();
+    List<String> medicineJsonList =[];
+    var blockList = _medicineList$!.value;
+    blockList.removeWhere((medicine) => medicine.medicineName == remove.medicineName);
+
+    //remove notification
+
+    if(blockList.isNotEmpty){
+      for(var blockMedicine in blockList){
+        String medicineJson = jsonEncode(blockMedicine.toJson());
+        medicineJsonList.add(medicineJson);
+
+      }
+    }
+    sharedUser.setStringList('medicines', medicineJsonList);
+    _medicineList$!.add(blockList);
+  }
+
+
   void dispose(){
     _medicineList$!.close();
   }
+
+
+
 }

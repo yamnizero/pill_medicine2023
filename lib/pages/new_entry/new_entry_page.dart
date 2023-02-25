@@ -111,33 +111,33 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       MedicineTypeColumn(
-                        name: "bottle",
+                        name: "Bottle",
                         iconValue: "assets/icons/bottle.svg",
                         isSelected:
-                            snapshot.data == MedicineType.bottle ? true : false,
-                        medicineType: MedicineType.bottle,
+                            snapshot.data == MedicineType.Bottle ? true : false,
+                        medicineType: MedicineType.Bottle,
                       ),
                       MedicineTypeColumn(
-                        name: "pill",
+                        name: "Pill",
                         iconValue: "assets/icons/pill.svg",
                         isSelected:
-                            snapshot.data == MedicineType.pill ? true : false,
-                        medicineType: MedicineType.pill,
+                            snapshot.data == MedicineType.Pill ? true : false,
+                        medicineType: MedicineType.Pill,
                       ),
                       MedicineTypeColumn(
-                        name: "syringe",
+                        name: "Syringe",
                         iconValue: "assets/icons/syringe.svg",
                         isSelected:
-                            snapshot.data == MedicineType.syringe ? true : false,
-                        medicineType: MedicineType.syringe,
+                            snapshot.data == MedicineType.Syringe ? true : false,
+                        medicineType: MedicineType.Syringe,
                       ),
                       //change image from tablet
                       MedicineTypeColumn(
-                        name: "tablet",
+                        name: "Tablet",
                         iconValue: "assets/icons/tablet.svg",
                         isSelected:
-                            snapshot.data == MedicineType.tablet ? true : false,
-                        medicineType: MedicineType.tablet,
+                            snapshot.data == MedicineType.Tablet ? true : false,
+                        medicineType: MedicineType.Tablet,
                       ),
                     ],
                   );
@@ -290,6 +290,8 @@ class _SelectTimeState extends State<SelectTime> {
   bool _clicked = false;
 
   Future<TimeOfDay> _selectTime() async {
+    final NewEntryBlock newEntryBlock =Provider.of<NewEntryBlock>(context,listen: false);
+
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _time,
@@ -298,6 +300,7 @@ class _SelectTimeState extends State<SelectTime> {
       setState(() {
         _time = picked;
         _clicked = true;
+        newEntryBlock.updateTime(convertTime(_time.hour.toString())+convertTime(_time.minute.toString()));
       });
     }
     return picked!;
@@ -443,6 +446,7 @@ class MedicineTypeColumn extends StatelessWidget {
   final String iconValue;
   final bool isSelected;
   final MedicineType medicineType;
+
 
   const MedicineTypeColumn({
     Key? key,

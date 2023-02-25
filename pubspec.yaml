@@ -43,6 +43,7 @@ dependencies:
   provider:
   shared_preferences:
   flare_flutter:
+  flutter_local_notifications:
 
 dev_dependencies:
   flutter_test:

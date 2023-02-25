@@ -144,6 +144,7 @@ class MedicineCard extends StatelessWidget {
   const MedicineCard({Key? key, required this.medicine}) : super(key: key);
 
   Hero makeIcon(double size){
+    //here is
     if(medicine.medicineType == 'Bottle'){
       return Hero(tag: medicine.medicineName! + medicine.medicineType!,
         child: SvgPicture.asset('assets/icons/bottle.svg',color: kOtherColor,height: 7.h,),
@@ -173,35 +174,7 @@ class MedicineCard extends StatelessWidget {
     return InkWell(
       highlightColor: kWhite,
       splashColor: Colors.grey ,
-      child: Container(
-        padding: EdgeInsets.only(left: 2.w,right: 2.w,top: 1.h,bottom: 1.h),
-        margin: EdgeInsets.all(1.h),
-        decoration: BoxDecoration(
-            color: kWhite, borderRadius: BorderRadius.circular(2.h)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-            makeIcon(7.h),
-            const Spacer(),
-            Hero(
-              tag: medicine.medicineName!,
-              child: Text(
-              medicine.medicineName!,
-                overflow: TextOverflow.fade,
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.headline6,),
-            ),
-            SizedBox(height: 0.3.h,),
-            //time interval data with condition....
-            Text(medicine.interval == 1 ? "Every ${medicine.interval} hour" : "Every ${medicine.interval} hour",
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.caption,),
-          ],
-        ),
-      ),
+
       onTap: (){
         //go to details activity,,,
         Navigator.of(context).push(PageRouteBuilder<void>(
@@ -221,6 +194,35 @@ class MedicineCard extends StatelessWidget {
         );
 
       },
+      child: Container(
+        padding: EdgeInsets.only(left: 2.w,right: 2.w,top: 1.h,bottom: 1.h),
+        margin: EdgeInsets.all(1.h),
+        decoration: BoxDecoration(
+            color: kWhite, borderRadius: BorderRadius.circular(2.h)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(),
+            makeIcon(7.h),
+            const Spacer(),
+            Hero(
+              tag: medicine.medicineName!,
+              child: Text(
+                medicine.medicineName!,
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.headline6,),
+            ),
+            SizedBox(height: 0.3.h,),
+            //time interval data with condition....
+            Text(medicine.interval == 1 ? "Every ${medicine.interval} hour" : "Every ${medicine.interval} hour",
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.caption,),
+          ],
+        ),
+      ),
     );
   }
 }
